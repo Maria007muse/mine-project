@@ -2,26 +2,23 @@ package stores.data;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
+@Data
 @Table(name = "role")
 public class Role {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
    private String name;
 
    public Role() {
-
    }
 
    public Role(String name) {
       super();
       this.name = name;
    }
-   public String getName() {
-      return name;
-   }
-
 }

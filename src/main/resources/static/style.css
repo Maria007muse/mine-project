@@ -1,0 +1,341 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url('images/d.jpg');
+    background-size: cover;
+    background-position: center;
+    overflow-y: hidden;
+}
+.no-background {
+    background-image: none !important;
+    background-color: #d9d2cc;
+    display: block;
+    padding: 100px 30px;
+}
+
+.no-backgroundadd {
+    background-image: none !important;
+    background-color: #d9d2cc;
+    display: grid;
+    padding: 100px 30px;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.no-backgroundaddtype {
+    background-image: none !important;
+    background-color: #d9d2cc;
+    display: block;
+    padding: 120px 30px;
+}
+
+.no-backgroundwarning {
+    background-image: none !important;
+    background-color: #d9d2cc;
+    display: grid;
+}
+
+.background-image {
+    background-image: url('images/g2.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.background-image-log {
+    background-image: url('images/log.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.background-image-regadmin{
+    background-image: url('images/rg.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.welcome {
+    text-align: center;
+    color: #d9d2cc;
+    padding: 15px;
+}
+.welcome-login {
+    text-align: center;
+}
+.header {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 20px 60px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+.main-buttons {
+    display: flex;
+    justify-content: flex-end;
+    max-width: 800px;
+}
+.main-buttons a {
+    font-weight: bolder;
+    margin-left: 10px;
+    font-size: 16px;
+    padding: 10px 30px;
+    color: rgb(217, 170, 143);
+    text-decoration: none;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+.main-buttons a:hover {
+    color: rgb(123, 58, 27);
+}
+.home-link {
+    font-size: 20px;
+    font-weight: bolder;
+    color: rgb(217, 170, 143);
+    text-decoration: none;
+    margin-right: 20px;
+    padding: 10px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+.home-link:hover {
+    color: rgb(123, 58, 27);
+}
+.login-button {
+    padding: 10px 20px;
+    color: #d9d2cc;
+    text-decoration: none;
+    background-color: rgba(8, 8, 7, 0.77);
+    border-radius: 50px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+.login-button:hover {
+    color: #d9d2cc;
+    background-color: rgba(8, 8, 7, 0.85);
+    border: none;
+}
+.exit {
+    font-weight: bolder;
+    margin-left: 10px;
+    font-size: 16px;
+    padding: 10px 30px;
+    color: rgb(217, 210, 204);
+    text-decoration: none;
+    border-radius: 50px;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    background-color: rgba(8, 8, 7, 0.71);
+}
+.exit:hover {
+    color: rgb(217, 210, 204);
+    background-color: rgba(220, 109, 56, 0.9);
+}
+
+.deal-table {
+    width: calc(100% - 40px);
+    border-collapse: collapse;
+}
+
+.deal-table th, .deal-table td {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    text-align: center;
+}
+
+.deal-table th {
+    background-color: rgb(220, 109, 56);
+    font-weight: bold;
+}
+
+
+/* Стили для кнопок действий */
+.action-button {
+    display: inline-block;
+    font-weight: bolder;
+    padding: 6px 12px;
+    text-decoration: none;
+    color: #b55431;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+    color: #632e1b;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    background-color: rgb(220, 109, 56);
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: rgb(123, 58, 27);
+}
+
+.button-submit{
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    border: none;
+    background-color: rgb(220, 109, 56);
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.error-message {
+    position: fixed;
+    top: 50px; /* Подберите нужное вам расположение */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #ff6347; /* Цвет фона ошибки */
+    color: #fff; /* Цвет текста */
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+    z-index: 1000;
+    display: none;
+}
+
+.error-message::before {
+    content: "⚠"; /* Замените на вашу иконку предупреждения */
+    margin-right: 10px;
+}
+
+.error-message.active {
+    display: block;
+    animation: fadeInDown 0.5s ease;
+}
+
+@keyframes fadeInDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-container {
+    background-color: rgba(223, 216, 208, 0.5);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin: auto;
+}
+
+.form-container-reg {
+    background-color: rgba(223, 216, 208, 0.8);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    width: 450px;
+    margin: 100px auto;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-gap: 10px;
+    margin-bottom: 20px;
+}
+
+.label-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2px;
+}
+
+.label-input label {
+    font-weight: bold;
+}
+
+.styled-input-text input,
+.select-box {
+    width: calc(100% - 20px); /* Чтобы учитывать ширину лейбла */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px; /* Установим более округлые углы */
+    background-color: #fff;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.styled-input-text input:focus,
+.select-box:focus {
+    border-color: #b55431;
+    outline: none;
+}
+
+.select-box {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23b55431" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/><path fill="none" d="M0 0h24v24H0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 30px;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.button-container-form {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.button-submit:hover {
+    background-color: rgb(123, 58, 27);
+}
+
+.validationError {
+    color: red;
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.container {
+    text-align: center;
+}
+
+.access-denied-content {
+    margin-bottom: 20px;
+}
+
+.main-button {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    background-color: rgb(220, 109, 56);
+    color: #ffffff;
+    transition: background-color 0.3s ease;
+}
+
+.main-button:hover {
+    background-color: rgb(123, 58, 27);
+}
+
+

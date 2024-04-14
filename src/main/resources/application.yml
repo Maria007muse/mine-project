@@ -3,10 +3,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/minesite
     username: postgres
     password: postgres
-  thymeleaf:
-    enabled: true
-    prefix: classpath:/templates/
-    suffix: .html
   jpa:
     hibernate:
       ddl-auto: update

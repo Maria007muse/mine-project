@@ -1,10 +1,10 @@
 package stores;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-@SpringBootApplication(scanBasePackages = {"stores"})
+@SpringBootApplication
 public class DealsApplication implements WebMvcConfigurer {
     public static void main(String[] args) {
         SpringApplication.run(DealsApplication.class, args);

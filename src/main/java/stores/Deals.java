@@ -1,15 +1,15 @@
 package stores;
+
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
+import stores.data.User;
+import stores.data.UserDeal;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import java.util.List;
+
 
 @Data
 @Table
@@ -17,12 +17,13 @@ public class Deals {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private Long typeId;
+    private Long placeId;
+    private Long currencyId;
 
     @NotBlank(message = "Тикер не может быть пустым.")
     @Size(min = 3, message = "Должно быть больше 3х символов")
-    @Pattern(regexp = "^[A-Za-zА-Яа-я]+$", message = "Тикер может содержать только буквы.")
+    @Pattern(regexp = "^[A-Za-zА-Яа-я ]+$", message = "Тикер может содержать только буквы.")
     private String ticker;
     
     @NotBlank(message = "Номер заказа не может быть пустым.")
@@ -48,7 +49,7 @@ public class Deals {
     @NotBlank(message = "Трейдер сделки не может быть пустым.")
     private String dealTrader;
 
-    @NotNull(message = "Цена сделки не может быть пустой.")
+    @NotNull(message = "Комиссия не может быть пустой.")
     @DecimalMin(value = "0.0", inclusive = false, message = "Цена сделки должна быть больше 0")
     private Double  dealCommission;
 

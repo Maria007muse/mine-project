@@ -15,27 +15,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class DealTypeRepositoryTest {
-
     @Autowired
     private DealTypeRepository dealTypeRepository;
-
     @Test
     public void testSaveDealType() {
         DealType dealType = new DealType();
         dealType.setType("SomeType");
-
         DealType savedDealType = dealTypeRepository.save(dealType);
         assertThat(savedDealType.getId()).isNotNull();
     }
-
     @Test
     public void testFindById() {
         DealType dealType = new DealType();
         dealType.setType("SomeType");
-
         DealType savedDealType = dealTypeRepository.save(dealType);
         Long dealTypeId = savedDealType.getId();
-
         DealType foundDealType = dealTypeRepository.findById(dealTypeId).orElse(null);
         assertThat(foundDealType).isNotNull();
         assertThat(foundDealType.getId()).isEqualTo(dealTypeId);
@@ -53,7 +47,6 @@ public class DealTypeRepositoryTest {
         assertThat(updatedDealType).isNotNull();
         assertThat(updatedDealType.getType()).isEqualTo("UpdatedType");
     }
-
     @Test
     public void testDeleteDealType() {
         DealType dealType = new DealType();

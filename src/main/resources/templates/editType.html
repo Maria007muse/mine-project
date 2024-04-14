@@ -1,28 +1,47 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Edit Deal Type</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" />
+    <link rel="stylesheet" th:href="@{/style.css}" />
 </head>
-<body>
-<h1>Редактировать тип сделки</h1>
+<body class="no-backgroundaddtype">
+<div class="header">
+    <a href="/" class="home-link">Главная</a>
+    <div class="main-buttons">
+        <a href="/deal/all">Сделки</a>
+        <a href="/type/all">Типы сделок</a>
+        <a href="/place/all">Места сделок</a>
+        <a href="/currency/all">Валюты</a>
+    </div>
+    <a href="javascript: document.logoutForm.submit()" class="exit" sec:authorize="isAuthenticated()">Выйти</a>
+    <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true" sec:authorize="isAuthenticated()">
+        <input hidden type="submit" value="Sign Out" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
 
-<form method="post" th:action="@{/editType/{id}(id=${dealType.id})}" th:object="${dealType}">
+<div class="form-container">
+<form method="post" th:action="@{/type/edit/{id}(id=${dealType.id})}" th:object="${dealType}">
+    <h1>Редактировать тип сделки</h1>
     <input type="hidden" th:field="*{id}" />
+    <div class="grid">
     <div class="label-input">
-    <label for="type">Название:</label>
-    <input type="text" id="type" th:field="*{type}" />
-    <span class="validationError" 
-        th:if="${#fields.hasErrors('type')}" 
-        th:errors="*{type}">Type Error</span><br>
-        </div>
-        
-        <div class="button-container">
-    <button type="submit" class='button'>Сохранить</button>
-    <a href="/allTypes" class='button'>Назад к списку всех типов</a>
+        <label for="type">Название:</label>
+    </div>
+    <div class="styled-input-text">
+        <input type="text" id="type" th:field="*{type}" />
+        <span class="validationError"
+              th:if="${#fields.hasErrors('type')}"
+              th:errors="*{type}">Type Error</span><br>
+    </div>
+
+    <div class="button-container-form">
+        <button type="submit" class='button-submit'>Сохранить</button>
+    </div>
     </div>
 </form>
-
+</div>
 </body>
 </html>
+

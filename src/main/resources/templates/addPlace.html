@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Place</title>
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+<body class="no-backgroundaddtype">
+<div class="header">
+    <a href="/" class="home-link">Главная</a>
+    <div class="main-buttons">
+        <a href="/deal/all">Сделки</a>
+        <a href="/type/all">Типы сделок</a>
+        <a href="/place/all">Места сделок</a>
+        <a href="/currency/all">Валюты</a>
+    </div>
+    <a href="javascript: document.logoutForm.submit()" class="exit" sec:authorize="isAuthenticated()">Выйти</a>
+    <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true" sec:authorize="isAuthenticated()">
+        <input hidden type="submit" value="Sign Out" />
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+
+<div class="form-container">
+<form method="post" th:action="@{/place/add}" th:object="${place}">
+    <h1>Добавьте новое место</h1>
+    <div class="grid">
+    <div class="label-input">
+        <label for="dealPlaceFull">Полное название:</label>
+    </div>
+    <div class="styled-input-text">
+        <input type="text" id="dealPlaceFull" th:field="*{dealPlaceFull}" />
+        <span class="validationError" th:if="${#fields.hasErrors('dealPlaceFull')}" th:errors="*{dealPlaceFull}">Full Name Error</span><br>
+    </div>
+    <div class="label-input">
+        <label for="dealPlaceShort">Короткое название:</label>
+    </div>
+    <div class="styled-input-text">
+        <input type="text" id="dealPlaceShort" th:field="*{dealPlaceShort}" />
+        <span class="validationError" th:if="${#fields.hasErrors('dealPlaceShort')}" th:errors="*{dealPlaceShort}">Short Name Error</span><br>
+    </div>
+    <div class="button-container-form">
+        <button type="submit" class='button-submit'>Добавить</button>
+    </div>
+    </div>
+</form>
+</div>
+</body>
+</html>

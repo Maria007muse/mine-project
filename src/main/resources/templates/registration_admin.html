@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация администратора</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/style.css}" />
+</head>
+
+<body class="background-image-regadmin">
+<div class="form-container-reg">
+
+    <form th:action="@{/registration/admin}" method="post" th:object="${admin}">
+
+        <div th:if="${param.success}">
+            <div class="alert alert-info">Администратор успешно зарегистрирован!</div>
+        </div>
+
+        <div th:if="${param.error}">
+            <div class="alert alert-danger">Ошибка при регистрации администратора!</div>
+        </div>
+
+        <h1>Регистрация администратора</h1>
+
+        <div class="form-group">
+            <label class="control-label" for="userName">Имя</label>
+            <input id="userName" class="form-control" th:field="*{userName}" required autofocus="autofocus" />
+            <span class="validationError" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Имя</span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="fullName">Полное имя</label>
+            <input id="fullName" class="form-control" th:field="*{fullName}" required autofocus="autofocus" />
+            <span class="validationError" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Полное имя</span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="street">Улица</label>
+            <input id="street" class="form-control" th:field="*{street}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="city">Город</label>
+            <input id="city" class="form-control" th:field="*{city}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="zip">Zip</label>
+            <input id="zip" class="form-control" th:field="*{zip}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="phoneNumber">Номер телефона</label>
+            <input id="phoneNumber" class="form-control" th:field="*{phoneNumber}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="password">Пароль</label>
+            <input id="password" class="form-control" type="password" th:field="*{password}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            <span>Уже зарегистрированы? <a href="/" th:href="@{/login}">Войти</a></span>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>
+
+
+
+

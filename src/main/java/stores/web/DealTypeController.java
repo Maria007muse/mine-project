@@ -4,11 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import stores.DealType;
 import stores.Deals;
@@ -19,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/type")
 public class DealTypeController {
     private final DealTypeRepository dealTypeRepository;
     private final DealsRepository dealRepository;
@@ -28,8 +25,7 @@ public class DealTypeController {
         this.dealRepository = dealRepository;
     }
 
-
-    @GetMapping("/allTypes")
+    @GetMapping("/all")
     public String showAllDealTypes(Model model) {
         model.addAttribute("dealTypes", dealTypeRepository.findAll());
         model.addAttribute("error", null);
@@ -37,24 +33,24 @@ public class DealTypeController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/addType")
+    @GetMapping("/add")
     public String showAddDealTypeForm(Model model) {
         model.addAttribute("dealType", new DealType());
         return "addType";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/addType")
-    public String addType(@ModelAttribute("dealType") @Valid DealType dealType, BindingResult result, Model model) {
+    @PostMapping("/add")
+    public String addType(@ModelAttribute("dealType") @Valid DealType dealType, BindingResult result) {
         if (result.hasErrors()) {
             return "addType";
         }
         dealTypeRepository.save(dealType);
-        return "redirect:/allTypes";
+        return "redirect:/type/all";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/editType/{id}")
+    @GetMapping("/edit/{id}")
     public String showEditDealTypeForm(@PathVariable Long id, Model model) {
         DealType dealType = dealTypeRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid deal type Id:" + id));
@@ -63,28 +59,27 @@ public class DealTypeController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/editType/{id}")
+    @PostMapping("/edit/{id}")
     public String editDealType(@PathVariable Long id, @ModelAttribute("dealType") @Valid DealType updatedDealType, BindingResult result) {
         if (result.hasErrors()) {
             return "editType";
         }
         dealTypeRepository.save(updatedDealType);
-        return "redirect:/allTypes";
+        return "redirect:/type/all";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/deleteType/{id}")
+    @GetMapping("/delete/{id}")
     public String deleteDealType(@PathVariable Long id, Model model) {
-        Optional<Deals> dealsWithThisType = dealRepository.findById(id);
-        if (!dealsWithThisType.isEmpty()) {
+        if (dealRepository.existsByTypeId(id)) {
             model.addAttribute("error", "Сделка с этим типом существует. Нельзя удалить тип сделки.");
             model.addAttribute("dealTypes", dealTypeRepository.findAll());
             return "allTypes";
         }
-
         dealTypeRepository.deleteById(id);
-        return "redirect:/allTypes";
+        return "redirect:/type/all";
     }
 }
+
 
 

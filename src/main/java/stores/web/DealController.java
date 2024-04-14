@@ -1,119 +1,148 @@
 package stores.web;
 
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
-import jakarta.validation.Valid;
-
-import org.springframework.beans.BeanUtils;
-import stores.DealType;
 import stores.Deals;
-import stores.data.DealTypeRepository;
-import stores.data.DealsRepository;
+import stores.data.*;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/deal")
 public class DealController {
     private final DealsRepository dealRepository;
     private final DealTypeRepository dealTypeRepository;
+    private final DealPlaceRepository dealPlaceRepository;
+    private final CurrencyRepository currencyRepository;
+    private final UserRepository userRepository;
+    private final UserDealRepository userDealRepository;
 
-    private static final Logger log = LoggerFactory.getLogger(DealController.class);
-
-    public DealController(DealsRepository dealRepository, DealTypeRepository dealTypeRepository) {
+    public DealController(DealsRepository dealRepository, DealTypeRepository dealTypeRepository,
+                          DealPlaceRepository dealPlaceRepository, CurrencyRepository currencyRepository,
+                          UserRepository userRepository, UserDealRepository userDealRepository) {
         this.dealRepository = dealRepository;
         this.dealTypeRepository = dealTypeRepository;
-    }
-    
-    private List<DealType> getAllDealTypes() {
-        return (List<DealType>) dealTypeRepository.findAll();
-    }
-
-
-    private void addDealTypeAttributes(Model model, Long selectedDealTypeId) {
-        model.addAttribute("allDealTypes", getAllDealTypes());
-        model.addAttribute("dealType", dealTypeRepository.findById(selectedDealTypeId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid deal type Id:" + selectedDealTypeId)));
+        this.dealPlaceRepository = dealPlaceRepository;
+        this.currencyRepository = currencyRepository;
+        this.userRepository = userRepository;
+        this.userDealRepository = userDealRepository;
     }
 
     @GetMapping("/create")
     public String dealForm(Model model) {
         model.addAttribute("deal", new Deals());
-        model.addAttribute("allDealTypes", getAllDealTypes()); // Load all deal types for the dropdown
+        model.addAttribute("allDealTypes", dealTypeRepository.findAll());
+        model.addAttribute("allDealPlaces", dealPlaceRepository.findAll());
+        model.addAttribute("allCurrencies", currencyRepository.findAll());
         return "Deal";
     }
 
     @GetMapping("/all")
     public String allDeals(Model model) {
-    	model.addAttribute("allDeals", dealRepository.findAll());
-        model.addAttribute("allDealTypes", getAllDealTypes());
+        model.addAttribute("allDeals", dealRepository.findAll());
+        model.addAttribute("allDealTypes", dealTypeRepository.findAll());
+        model.addAttribute("allDealPlaces", dealPlaceRepository.findAll());
+        model.addAttribute("allCurrencies", currencyRepository.findAll());
         return "allDeals";
     }
 
-
     @PostMapping("/submit")
-    public String processDeal(@Valid @ModelAttribute("deal") Deals deal, Errors errors, SessionStatus sessionStatus,
-                              @RequestParam("typeId") Long typeId, Model model) {
-        // Always add deal types to the model
-        model.addAttribute("allDealTypes", getAllDealTypes());
-
+    public String processDeal(@Valid @ModelAttribute("deal") Deals deal, Errors errors,
+                              SessionStatus sessionStatus, Model model, Principal principal) {
         if (errors.hasErrors()) {
+            model.addAttribute("allDealTypes", dealTypeRepository.findAll());
+            model.addAttribute("allDealPlaces", dealPlaceRepository.findAll());
+            model.addAttribute("allCurrencies", currencyRepository.findAll());
             return "Deal";
         }
-        DealType selectedDealType = dealTypeRepository.findById(typeId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid deal type Id:" + typeId));
-        deal.setTypeId(selectedDealType.getId());
-        dealTypeRepository.save(selectedDealType); // Ensure the selected deal type is saved
-        log.info("Deal submitted: {}", deal);
+
+        String username = principal.getName();
+        User currentUser = userRepository.findByUserName(username);
+        if (currentUser == null) {
+            throw new IllegalArgumentException("User not found: " + username);
+        }
+
         dealRepository.save(deal);
+        saveUserDeal(currentUser, deal);
         sessionStatus.setComplete();
-        return "redirect:/deal/all"; // Возвращает редирект на страницу, отображающую все сделки
+        return "redirect:/deal/all";
     }
 
+    private void saveUserDeal(User user, Deals deal) {
+        UserDeal userDeal = new UserDeal();
+        userDeal.setUserId(user.getId());
+        userDeal.setDealId(deal.getId());
+        userDealRepository.save(userDeal);
+    }
 
 
     @GetMapping("/edit/{id}")
-    public String editDeal(@PathVariable Long id, Model model) {
-        if (id == null) {
-            throw new IllegalArgumentException("Deal id cannot be null");
+    public String editDeal(@PathVariable Long id, Model model, Principal principal) {
+        Deals deal = findDealById(id);
+        if (!hasAccess(principal, deal)) {
+            return "accessDenied";
         }
 
-        Deals deal = dealRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid deal Id:" + id));
         model.addAttribute("deal", deal);
-        addDealTypeAttributes(model, deal.getTypeId());
+        model.addAttribute("allDealTypes", dealTypeRepository.findAll());
+        model.addAttribute("allDealPlaces", dealPlaceRepository.findAll());
+        model.addAttribute("allCurrencies", currencyRepository.findAll());
         return "DealEdit";
     }
 
+    private Deals findDealById(Long id) {
+        return dealRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid deal Id:" + id));
+    }
 
     @PostMapping("/update/{id}")
     public String updateDeal(@PathVariable Long id, @Valid @ModelAttribute("deal") Deals deal,
-                             BindingResult result, Model model) {
+                             BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
-            addDealTypeAttributes(model, deal.getTypeId());
+            model.addAttribute("allDealTypes", dealTypeRepository.findAll());
+            model.addAttribute("allDealPlaces", dealPlaceRepository.findAll());
+            model.addAttribute("allCurrencies", currencyRepository.findAll());
             return "DealEdit";
         }
-
-        Deals existingDeal = dealRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid deal Id:" + id));
-
-        BeanUtils.copyProperties(deal, existingDeal, "id");
-        dealRepository.save(existingDeal);
+        dealRepository.save(deal);
         return "redirect:/deal/all";
     }
 
-
     @GetMapping("/delete/{id}")
-    public String deleteDeal(@PathVariable Long id) {
+    @Transactional
+    public String deleteDeal(@PathVariable Long id, Principal principal) {
+        Deals deal = findDealById(id);
+        if (!hasAccess(principal, deal)) {
+            return "accessDenied";
+        }
+        userDealRepository.deleteByDealId(id);
         dealRepository.deleteById(id);
         return "redirect:/deal/all";
     }
+
+
+    private boolean hasAccess(Principal principal, Deals deal) {
+        String username = principal.getName();
+        User currentUser = userRepository.findByUserName(username);
+        boolean isAdmin = currentUser.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return true;
+        }
+
+        UserDeal userDeal = userDealRepository.findByUserIdAndDealId(currentUser.getId(), deal.getId());
+        return userDeal != null;
+    }
 }
+
+
+
 
 
 

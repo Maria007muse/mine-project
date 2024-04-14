@@ -1,58 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Denied</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .container {
-            text-align: center;
-        }
-
-        h1 {
-            color: #ff5722;
-        }
-
-        p {
-            color: #333;
-        }
-        .main-button{
-            display: block;
-            width: 200px;
-            padding: 10px;
-            background-color: #ff6600;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-size: 14px;
-            border-radius: 5px;
-            margin-left: 0px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            border: none;
-            cursor: pointer;
-        }
-        a.main-button:hover {
-            background-color: #ff8000; /* Изменяем цвет при наведении */
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/style.css}" />
 </head>
-<body>
+<body class="no-backgroundwarning">
 <div class="container">
-    <h1>Доступ запрещен</h1>
-    <p>У вас нет прав доступа к этой странице.</p>
-    <a href="/" class="main-button">На главную</a>
+    <div class="access-denied-content">
+        <h1>Доступ запрещен</h1>
+        <p>У вас нет прав доступа к этой странице.</p>
+    </div>
+    <div class="button-container">
+        <a href="/" class="main-button">На главную</a>
+    </div>
 </div>
 </body>
 </html>
+

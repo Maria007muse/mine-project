@@ -1,25 +1,21 @@
 package stores;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 @Data
 @Table
 public class DealType {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Используем GenerationType.IDENTITY для SERIAL в PostgreSQL
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "Поле не должно быть пустым")
-    @Pattern(regexp = "^[A-Za-zА-Яа-я]+$", message = "Тип может содержать только буквы.")
+    @Pattern(regexp = "^[A-Za-zА-Яа-я ]+$", message = "Тип может содержать только буквы.")
     private String type;
 
 }

@@ -1,6 +1,8 @@
 package stores.security;
 
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,13 +31,13 @@ public class RegistrationController {
    }
 
    @PostMapping
-   public String registerUserAccount(@ModelAttribute("user")
-                                     UserRegistrationDto registrationDto) {
-
+   public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto registrationDto, BindingResult result) {
+      if (result.hasErrors()) {
+         return "registration";
+      }
       try {
          userService.save(registrationDto);
-      }catch(Exception e)
-      {
+      } catch (Exception e) {
          System.out.println(e);
          return "redirect:/registration?email_invalid";
       }

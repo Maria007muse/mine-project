@@ -4,22 +4,17 @@
     <meta charset="UTF-8">
     <title>Вход</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/style.css}" />
 </head>
 
-<body>
-
-<br><br><br><br><br><br><br>
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-
+<body class="background-image-log">
+<div class="form-container-reg">
             <h1>Вход в профиль</h1>
             <form th:action="@{/login}" method="post">
 
                 <!-- error message -->
                 <div th:if="${param.error}">
-                    <div class="alert alert-danger">Invalid username or
-                        password.</div>
+                    <div class="alert alert-danger">Неверные имя или пароль.</div>
                 </div>
 
                 <!-- logout message -->
@@ -47,7 +42,7 @@
                             <input type="submit" name="login-submit"
                                    id="login-submit"
                                    class="form-control btn btn-primary"
-                                   value="Log In" />
+                                   value="Войти" />
                         </div>
                     </div>
                 </div>
@@ -57,7 +52,5 @@
                 Зарегистрироваться здесь</a></span>
             </div>
         </div>
-    </div>
-</div>
 </body>
 </html>

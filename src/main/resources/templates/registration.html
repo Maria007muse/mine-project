@@ -1,96 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <title>Регистрация</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/style.css}" />
 </head>
 
+<body class="background-image">
+<div class="form-container-reg">
+    <form th:action="@{/registration}" method="post" th:object="${user}">
 
-<body>
-
-
-<br><br><br>
-<!-- Create HTML registration form -->
-<div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-
-            <!-- success message -->
-            <div th:if="${param.success}">
-                <div class="alert alert-info">Вы успешно зарегистрировались!</div>
-            </div>
-
-            <div th:if="${param.email_invalid}">
-                <div class="alert alert-danger">
-                    Имя уже существует!</div>
-            </div>
-
-            <h1>Регистрация</h1>
-
-            <form th:action="@{/registration}" method="post" th:object="${user}">
-
-
-                <div class="form-group">
-                    <label class="control-label" for="userName"> Имя
-                    </label> <input id="userName" class="form-control"
-                                    th:field="*{userName}" required autofocus="autofocus"
-                />
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="fullName">
-                        Полное имя </label> <input id="fullName"
-                                                  class="form-control" th:field="*{fullName}"
-                                                  required autofocus="autofocus" />
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="street"> Улица
-                    </label> <input id="street" class="form-control"
-                                    th:field="*{street}" required autofocus="autofocus"
-                />
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="city"> Город
-                    </label> <input id="city" class="form-control"
-                                    th:field="*{city}" required autofocus="autofocus"
-                />
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="zip"> Zip
-                    </label> <input id="zip" class="form-control"
-                                    th:field="*{zip}" required autofocus="autofocus"
-                />
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label" for="phoneNumber"> Номер телефона
-                    </label> <input id="phoneNumber" class="form-control"
-                                    th:field="*{phoneNumber}" required autofocus="autofocus"
-                />
-                </div>
-
-
-                <div class="form-group">
-                    <label class="control-label" for="password">
-                        Пароль </label> <input id="password"
-                                                 class="form-control" type="password"
-                                                 th:field="*{password}" required
-                                                 autofocus="autofocus" />
-                </div>
-
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">
-                        Зарегистрироваться </button>
-                    <span>Уже зарегистрированы? <a href="/"
-                                                 th:href="@{/login}">Войти здесь</a></span>
-                </div>
-            </form>
+        <div th:if="${param.success}">
+            <div class="alert alert-info">Вы успешно зарегистрировались!</div>
         </div>
-    </div>
+        <div th:if="${param.email_invalid}">
+            <div class="alert alert-danger">Имя уже существует!</div>
+        </div>
+        <h1>Регистрация</h1>
+
+        <div class="form-group">
+            <label class="control-label" for="userName">Имя</label>
+            <input id="userName" class="form-control" th:field="*{userName}" required autofocus="autofocus" />
+            <span class="validationError" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">Имя</span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="fullName">Полное имя</label>
+            <input id="fullName" class="form-control" th:field="*{fullName}" required autofocus="autofocus" />
+            <span class="validationError" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Полное имя</span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="street">Улица</label>
+            <input id="street" class="form-control" th:field="*{street}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('street')}" th:errors="*{street}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="city">Город</label>
+            <input id="city" class="form-control" th:field="*{city}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="zip">Zip</label>
+            <input id="zip" class="form-control" th:field="*{zip}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="phoneNumber">Номер телефона</label>
+            <input id="phoneNumber" class="form-control" th:field="*{phoneNumber}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label" for="password">Пароль</label>
+            <input id="password" class="form-control" type="password" th:field="*{password}" required autofocus="autofocus"/>
+            <span class="validationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            <span>Уже зарегистрированы? <a href="/" th:href="@{/login}">Войти</a></span>
+        </div>
+
+    </form>
 </div>
 </body>
 </html>

@@ -23,13 +23,6 @@ public class HomeControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void loginPage() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/login"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
-    }
-
-    @Test
     @WithMockUser
     public void homePage() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/"))

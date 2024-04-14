@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import stores.Currency;
+import stores.DealPlace;
+import stores.DealType;
 import stores.Deals;
 import stores.data.DealsRepository;
 
@@ -19,6 +22,9 @@ public class DealsRepositoryTest {
     @Test
     public void testSaveDeal() {
         Deals deal = new Deals();
+        deal.setTypeId(1L);
+        deal.setPlaceId(1L);
+        deal.setCurrencyId(1L);
         deal.setTicker("AAPL");
         deal.setOrderNumber("123456");
         deal.setDealNumber("654321");
@@ -35,6 +41,9 @@ public class DealsRepositoryTest {
     @Test
     public void testFindById() {
         Deals deal = new Deals();
+        deal.setTypeId(1L);
+        deal.setPlaceId(1L);
+        deal.setCurrencyId(1L);
         deal.setTicker("AAPL");
         deal.setOrderNumber("123456");
         deal.setDealNumber("654321");
@@ -55,6 +64,9 @@ public class DealsRepositoryTest {
     @Test
     public void testUpdateDeal() {
         Deals deal = new Deals();
+        deal.setTypeId(1L);
+        deal.setPlaceId(1L);
+        deal.setCurrencyId(1L);
         deal.setTicker("AAPL");
         deal.setOrderNumber("123456");
         deal.setDealNumber("654321");
@@ -78,6 +90,9 @@ public class DealsRepositoryTest {
     @Test
     public void testDeleteDeal() {
         Deals deal = new Deals();
+        deal.setTypeId(1L);
+        deal.setPlaceId(1L);
+        deal.setCurrencyId(1L);
         deal.setTicker("AAPL");
         deal.setOrderNumber("123456");
         deal.setDealNumber("654321");

@@ -43,6 +43,21 @@ public class UserServiceImpl implements UserService {
    }
 
     @Override
+    public User saveAdmin(AdminRegistrationDto adminDto) {
+        User admin = new User(
+                adminDto.getUserName(),
+                adminDto.getFullName(),
+                adminDto.getStreet(),
+                adminDto.getCity(),
+                adminDto.getZip(),
+                adminDto.getPhoneNumber(),
+                passwordEncoder.encode(adminDto.getPassword()),
+                Arrays.asList(new Role("ROLE_ADMIN")));
+        return userRepository.save(admin);
+    }
+
+
+    @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
@@ -51,9 +66,6 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException
                     ("Invalid username or password.");
         }
-
-        Collection<Role> roles = user.getRoles();
-        roles.add(new Role("ROLE_USER"));
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),

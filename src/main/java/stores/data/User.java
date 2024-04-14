@@ -2,17 +2,19 @@ package stores.data;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import stores.Deals;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "user_table", uniqueConstraints =
+@Table(name = "users_table", uniqueConstraints =
        @UniqueConstraint(columnNames = "userName"))
 public class User {
 
    @Id
-   @GeneratedValue(strategy = GenerationType.AUTO)
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
    private Long id;
 
    @Column(name = "user_name")
@@ -37,6 +39,7 @@ public class User {
               (name = "role_id", 
                  referencedColumnName = "id"))
    private Collection<Role> roles;
+
 
    public User() {
 

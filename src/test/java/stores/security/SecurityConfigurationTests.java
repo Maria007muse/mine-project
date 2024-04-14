@@ -19,14 +19,14 @@ public class SecurityConfigurationTests {
     @Test
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     public void accessAdminPageAsAdmin() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/addType"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/type/add"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @WithMockUser(username = "user", roles = {"USER"})
     public void accessAdminPageAsUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/addType"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/type/add"))
                 .andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 

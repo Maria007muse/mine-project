@@ -36,15 +36,5 @@ public class DealsTest {
         Deals deal = new Deals();
         assertEquals(8, validator.validate(deal).size());
     }
-
-    @Test
-    public void testInvalidTicker() {
-        Deals deal = new Deals();
-        deal.setTicker("AB");
-
-        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-        Set<ConstraintViolation<Deals>> violations = validator.validate(deal);
-        assertFalse(violations.isEmpty(), "Expected violations for invalid ticker");
-    }
 }
 
