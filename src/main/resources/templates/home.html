@@ -6,6 +6,7 @@
     <link rel="stylesheet" th:href="@{/style.css}" />
 </head>
 <body>
+<div class="containerr">
 <div class="welcome-login">
     <div class="welcome" sec:authorize="!isAuthenticated()">
         <h1>Добро пожаловать!</h1>
@@ -19,20 +20,40 @@
     <h1 th:text="'Добро пожаловать, ' + ${#authentication.principal.username} + '!'"></h1>
 </div>
 
-<div class="header">
-    <a href="/" class="home-link">Главная</a>
-<div class="main-buttons">
-    <a href="/deal/all">Сделки</a>
-    <a href="/type/all">Типы сделок</a>
-    <a href="/place/all">Места сделок</a>
-    <a href="/currency/all">Валюты</a>
+<div class="header-arrow" id="header-arrow">
+    <div class="arrow"></div>
 </div>
+<div class="header-vertical" id="header-vertical">
+    <a href="/" class="home-link">
+        <img src="/images/icon.png" alt="Главная">
+    </a>
+    <div class="main-buttons-vertical">
+        <a href="/deal/all">Сделки</a>
+        <a href="/type/all">Типы сделок</a>
+        <a href="/place/all">Места сделок</a>
+        <a href="/currency/all">Валюты</a>
+    </div>
     <a href="javascript: document.logoutForm.submit()" class="exit" sec:authorize="isAuthenticated()">Выйти</a>
     <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true" sec:authorize="isAuthenticated()">
         <input hidden type="submit" value="Sign Out" />
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     </form>
 </div>
+</div>
+<footer class="footer">
+    <span>© 2024 РИНХ. Все права защищены.</span>
+    <span>ПИ-332 Рубанова Мария</span>
+</footer>
+<script>
+    document.getElementById('header-arrow').addEventListener('mouseenter', function() {
+        document.getElementById('header-vertical').style.left = '0'; // Показываем панель при наведении курсора на стрелку
+    });
+
+    document.getElementById('header-vertical').addEventListener('mouseleave', function() {
+        document.getElementById('header-vertical').style.left = '-200px'; // Скрываем панель при уходе курсора с панели
+    });
+
+</script>
 </body>
 </html>
 

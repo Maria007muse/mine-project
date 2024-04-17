@@ -7,20 +7,16 @@
 </head>
 <body class="no-backgroundaddtype">
 <div class="header">
-    <a href="/" class="home-link">Главная</a>
-    <div class="main-buttons">
-        <a href="/deal/all">Сделки</a>
-        <a href="/type/all">Типы сделок</a>
-        <a href="/place/all">Места сделок</a>
-        <a href="/currency/all">Валюты</a>
-    </div>
+    <a href="/" >
+        <img src="/images/icon2.png" alt="Главная">
+    </a>
     <a href="javascript: document.logoutForm.submit()" class="exit" sec:authorize="isAuthenticated()">Выйти</a>
     <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true" sec:authorize="isAuthenticated()">
         <input hidden type="submit" value="Sign Out" />
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     </form>
 </div>
-
+<div class="formitems">
 <div class="form-container">
 <form method="post" th:action="@{/currency/update/{id}(id=${currency.id})}" th:object="${currency}" th:modelAttribute="currency">
     <h1>Редактировать валюту</h1>
@@ -45,5 +41,10 @@
     </div>
 </form>
 </div>
+</div>
+<footer class="foot">
+    <span>© 2024 РИНХ. Все права защищены.</span>
+    <span>ПИ-332 Рубанова Мария</span>
+</footer>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package stores.data;
+package stores.dto;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
