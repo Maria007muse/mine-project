@@ -2,9 +2,8 @@ package stores.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import stores.entity.Currency;
-import stores.entity.DealPlace;
 import org.springframework.validation.Errors;
+import stores.entity.DealPlace;
 import stores.repository.DealPlaceRepository;
 import stores.repository.DealsRepository;
 
