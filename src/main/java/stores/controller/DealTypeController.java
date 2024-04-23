@@ -9,21 +9,20 @@ import jakarta.validation.Valid;
 import stores.entity.DealType;
 import stores.repository.DealTypeRepository;
 import stores.repository.DealsRepository;
+import stores.service.DealTypeService;
 
 @Controller
 @RequestMapping("/type")
 public class DealTypeController {
-    private final DealTypeRepository dealTypeRepository;
-    private final DealsRepository dealRepository;
+    private final DealTypeService dealTypeService;
 
-    public DealTypeController(DealTypeRepository dealTypeRepository, DealsRepository dealRepository) {
-        this.dealTypeRepository = dealTypeRepository;
-        this.dealRepository = dealRepository;
+    public DealTypeController(DealTypeService dealTypeService) {
+        this.dealTypeService = dealTypeService;
     }
 
     @GetMapping("/all")
     public String showAllDealTypes(Model model) {
-        model.addAttribute("dealTypes", dealTypeRepository.findAll());
+        model.addAttribute("dealTypes", dealTypeService.getAllDealTypes());
         model.addAttribute("error", null);
         return "allTypes";
     }
@@ -38,44 +37,24 @@ public class DealTypeController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public String addType(@ModelAttribute("dealType") @Valid DealType dealType, BindingResult result) {
-        if (result.hasErrors()) {
-            return "addType";
-        }
-        dealTypeRepository.save(dealType);
-        return "redirect:/type/all";
+        return dealTypeService.addDealType(dealType, result);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/edit/{id}")
     public String showEditDealTypeForm(@PathVariable Long id, Model model) {
-        DealType dealType = dealTypeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid deal type Id:" + id));
-        model.addAttribute("dealType", dealType);
-        return "editType";
+        return dealTypeService.editDealTypeForm(id, model);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/edit/{id}")
     public String editDealType(@PathVariable Long id, @ModelAttribute("dealType") @Valid DealType updatedDealType, BindingResult result) {
-        if (result.hasErrors()) {
-            return "editType";
-        }
-        dealTypeRepository.save(updatedDealType);
-        return "redirect:/type/all";
+        return dealTypeService.updateDealType(id, updatedDealType, result);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
     public String deleteDealType(@PathVariable Long id, Model model) {
-        if (dealRepository.existsByTypeId(id)) {
-            model.addAttribute("error", "Сделка с этим типом существует. Нельзя удалить тип сделки.");
-            model.addAttribute("dealTypes", dealTypeRepository.findAll());
-            return "allTypes";
-        }
-        dealTypeRepository.deleteById(id);
-        return "redirect:/type/all";
+        return dealTypeService.deleteDealType(id, model);
     }
 }
-
-
-

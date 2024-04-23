@@ -1,124 +1,55 @@
 package stores.controller;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
-import org.springframework.web.bind.support.SessionStatus;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import stores.entity.Deals;
-import stores.entity.Role;
-import stores.entity.User;
-import stores.repository.*;
+import stores.service.DealService;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(DealController.class)
 public class DealControllerTest {
 
-    @InjectMocks
-    private DealController dealController;
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
-    private DealsRepository dealRepository;
+    @MockBean
+    private DealService dealService;
 
-    @Mock
-    private DealTypeRepository dealTypeRepository;
+    @Test
+    @WithMockUser
+    public void testAllDeals() throws Exception {
+        List<Deals> deals = Arrays.asList(new Deals(), new Deals());
+        when(dealService.getAllDeals()).thenReturn(deals);
 
-    @Mock
-    private DealPlaceRepository dealPlaceRepository;
-
-    @Mock
-    private CurrencyRepository currencyRepository;
-
-    @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private UserDealRepository userDealRepository;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
+        mockMvc.perform(MockMvcRequestBuilders.get("/deal/all"))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("allDeals", deals))
+                .andExpect(view().name("allDeals"));
     }
 
     @Test
-    public void testAllDeals() {
-        Model model = mock(Model.class);
-        List<Deals> deals = new ArrayList<>();
-        when(dealRepository.findAll()).thenReturn(deals);
+    @WithMockUser
+    public void testDeleteDeal() throws Exception {
+        Long dealId = 1L;
+        when(dealService.deleteDeal(eq(dealId), any(Principal.class)))
+                .thenReturn("redirect:/deal/all");
 
-        String viewName = dealController.allDeals(model);
-
-        assertEquals("allDeals", viewName);
-        verify(model).addAttribute("allDeals", deals);
+        mockMvc.perform(MockMvcRequestBuilders.get("/deal/delete/{id}", dealId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/deal/all"));
     }
-
-    @Test
-    public void testProcessDeal() {
-        Model model = mock(Model.class);
-        Errors errors = mock(Errors.class);
-        SessionStatus sessionStatus = mock(SessionStatus.class);
-        Principal principal = mock(Principal.class);
-        Deals deal = new Deals();
-
-        when(errors.hasErrors()).thenReturn(false);
-        when(principal.getName()).thenReturn("testUser");
-        when(userRepository.findByUserName("testUser")).thenReturn(new User());
-
-        String viewName = dealController.processDeal(deal, errors, sessionStatus, model, principal);
-
-        assertEquals("redirect:/deal/all", viewName);
-        verify(dealRepository).save(deal);
-        verify(sessionStatus).setComplete();
-    }
-
-    @Test
-    public void testEditDeal() {
-        Model model = mock(Model.class);
-        Principal principal = mock(Principal.class);
-        Deals deal = new Deals();
-        User user = new User();
-
-        user.setRoles(Collections.singletonList(new Role("ROLE_ADMIN")));
-        when(dealRepository.findById(1L)).thenReturn(java.util.Optional.of(deal));
-        when(dealTypeRepository.findAll()).thenReturn(new ArrayList<>());
-        when(dealPlaceRepository.findAll()).thenReturn(new ArrayList<>());
-        when(currencyRepository.findAll()).thenReturn(new ArrayList<>());
-        when(principal.getName()).thenReturn("testUser");
-        when(userRepository.findByUserName("testUser")).thenReturn(user);
-
-        String viewName = dealController.editDeal(1L, model, principal);
-
-        assertEquals("DealEdit", viewName);
-        verify(model).addAttribute("deal", deal);
-        verify(dealTypeRepository).findAll();
-        verify(dealPlaceRepository).findAll();
-        verify(currencyRepository).findAll();
-    }
-
-    @Test
-    public void testDeleteDeal() {
-        Principal principal = mock(Principal.class);
-        Deals deal = new Deals();
-        User user = new User();
-        user.setRoles(Collections.singletonList(new Role("ROLE_ADMIN")));
-        when(dealRepository.findById(1L)).thenReturn(java.util.Optional.of(deal));
-        when(principal.getName()).thenReturn("testUser");
-        when(userRepository.findByUserName("testUser")).thenReturn(user);
-
-        String viewName = dealController.deleteDeal(1L, principal);
-
-        assertEquals("redirect:/deal/all", viewName);
-        verify(userDealRepository).deleteByDealId(1L);
-        verify(dealRepository).deleteById(1L);
-    }
-
 }

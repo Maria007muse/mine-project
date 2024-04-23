@@ -9,21 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import stores.entity.Currency;
 import stores.repository.CurrencyRepository;
 import stores.repository.DealsRepository;
+import stores.service.CurrencyService;
 
 @Controller
 @RequestMapping("/currency")
 public class CurrencyController {
-    private final CurrencyRepository currencyRepository;
-    private final DealsRepository dealsRepository;
+    private final CurrencyService currencyService;
 
-    public CurrencyController(CurrencyRepository currencyRepository, DealsRepository dealsRepository) {
-        this.currencyRepository = currencyRepository;
-        this.dealsRepository = dealsRepository;
+    public CurrencyController(CurrencyService currencyService) {
+        this.currencyService = currencyService;
     }
 
     @GetMapping("/all")
     public String allCurrencies(Model model) {
-        model.addAttribute("allCurrencies", currencyRepository.findAll());
+        model.addAttribute("allCurrencies", currencyService.getAllCurrencies());
         return "allCurrencies";
     }
 
@@ -37,18 +36,13 @@ public class CurrencyController {
     @PostMapping("/add")
     @PreAuthorize("hasRole('ADMIN')")
     public String addCurrency(@Valid @ModelAttribute("currency") Currency currency, Errors errors) {
-        if (errors.hasErrors()) {
-            return "addCurrency";
-        }
-        currencyRepository.save(currency);
-        return "redirect:/currency/all";
+        return currencyService.addCurrency(currency, errors);
     }
 
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String editCurrencyForm(@PathVariable Long id, Model model) {
-        Currency currency = currencyRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid currency Id:" + id));
+        Currency currency = currencyService.getCurrencyById(id);
         model.addAttribute("currency", currency);
         return "editCurrency";
     }
@@ -56,23 +50,14 @@ public class CurrencyController {
     @PostMapping("/update/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String updateCurrency(@PathVariable Long id, @Valid @ModelAttribute("currency") Currency currency, Errors errors) {
-        if (errors.hasErrors()) {
-            return "editCurrency";
-        }
-        currencyRepository.save(currency);
-        return "redirect:/currency/all";
+        return currencyService.updateCurrency(id, currency, errors);
     }
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public String deleteCurrency(@PathVariable Long id, Model model) {
-        if (dealsRepository.existsByCurrencyId(id)) {
-            model.addAttribute("error", "Невозможно удалить валюту, так как с ней связана сделка.");
-            model.addAttribute("allCurrencies", currencyRepository.findAll());
-            return "allCurrencies";
-        }
-        currencyRepository.deleteById(id);
-        return "redirect:/currency/all";
+        return currencyService.deleteCurrency(id, model);
     }
+
 }
 

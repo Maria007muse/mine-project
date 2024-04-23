@@ -7,7 +7,6 @@ import stores.entity.UserDeal;
 @Repository
 public interface UserDealRepository extends JpaRepository<UserDeal, Long> {
     UserDeal findByUserIdAndDealId(Long userId, Long dealId);
-
     void deleteByDealId(Long dealId);
 }
 

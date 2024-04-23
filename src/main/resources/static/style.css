@@ -127,7 +127,7 @@ body {
     top: 0;
     left: -200px;
     bottom: 0;
-    overflow-y: auto; /* Добавляем прокрутку, если содержимое выходит за пределы панели */
+    overflow-y: auto;
     border-top-right-radius: 30px;
     border-bottom-right-radius: 30px;
     z-index: 1000;
@@ -296,20 +296,20 @@ body {
 
 .error-message {
     position: fixed;
-    top: 50px; /* Подберите нужное вам расположение */
+    top: 50px;
     left: 50%;
     transform: translateX(-50%);
     padding: 10px 20px;
-    background-color: #ff6347; /* Цвет фона ошибки */
-    color: #fff; /* Цвет текста */
+    background-color: #ff6347;
+    color: #fff;
     border-radius: 5px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: none;
 }
 
 .error-message::before {
-    content: "⚠"; /* Замените на вашу иконку предупреждения */
+    content: "⚠";
     margin-right: 10px;
 }
 
@@ -367,11 +367,11 @@ body {
 
 .styled-input-text input,
 .select-box {
-    width: calc(100% - 20px); /* Чтобы учитывать ширину лейбла */
+    width: calc(100% - 20px);
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ccc;
-    border-radius: 8px; /* Установим более округлые углы */
+    border-radius: 8px;
     background-color: #fff;
     font-size: 16px;
     transition: border-color 0.3s ease;
@@ -436,4 +436,48 @@ body {
     background-color: rgb(123, 58, 27);
 }
 
+/* Стили для модального окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 40%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center;
+}
+
+.modal-content p {
+    margin: 0;
+}
+
+.modal-content button {
+    margin-top: 10px;
+    background-color: orange;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.modal-content #confirmNo {
+    margin-right: 10px;
+}
+
+.modal-content #confirmYes {
+    margin-left: 10px;
+}
 
